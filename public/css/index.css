@@ -1,0 +1,17 @@
+main {
+    width: 60vw;
+    margin-left: 20vw;
+    padding-top: 10vh;
+}
+
+.login {
+    padding: 10px;
+    text-align: center;
+}
+
+.login input.button {
+    width: 5vw;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+}

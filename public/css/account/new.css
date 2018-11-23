@@ -1,0 +1,13 @@
+main {
+    width: 60vw;
+    margin-left: 20vw;
+    padding-top: 10vh;
+}
+
+.account {
+  text-align: center;
+}
+
+button {
+  margin-top: 10px;
+}
