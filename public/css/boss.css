@@ -1,0 +1,30 @@
+main {
+    width: 60vw;
+    margin-left: 20vw;
+    margin-right: 20vw;
+    padding-top: 10vh;
+}
+
+aside {
+    display: inline-block;
+    vertical-align: top;
+}
+
+aside.left {
+    width: 35vw;
+    padding-left: 10px;
+}
+
+aside.right {
+    width: 20vw;
+    text-align: right;
+    padding-right: 20px;
+}
+
+img {
+    max-height: 200px;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+    display: inline-block;
+}

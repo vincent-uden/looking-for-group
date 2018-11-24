@@ -3,6 +3,27 @@ html
   head
     title Looking For Group
     link rel="stylesheet" type="text/css" href="/css/main.css"
-    link href="https://fonts.googleapis.com/css?family=Roboto:100" rel="stylesheet"
+    link href="https://fonts.googleapis.com/css?family=Roboto:100, 400" rel="stylesheet"
   body
-    == yield
+    - if @current_user
+      nav
+        .panel
+          form action="/" method="get"
+            button.nav type="submit" Home
+          form action="/" method="get"
+            button.nav type="submit" Account
+          form action="/logout" method="post"
+            button.nav type="submit" Log out
+      == yield
+    - else
+      link rel="stylesheet" href="/css/index.css"
+      main
+        .panel
+          h1 Welcome to LFG
+          .login
+            form action="/login" method="post"
+              input.text-input type="text" name="username" placeholder="Username"
+              input.text-input type="password" name="password" placeholder="Password"
+              button type="submit" Log in
+            a href="/account/new"
+              input type="button" value="Register Account"

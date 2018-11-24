@@ -5,5 +5,10 @@ main
     .account
       form action="/account/new" method="post"
         input.text-input type="text" name="username" placeholder="Username"
-        input.text-input type="password" name="password" placeholder="Password" minlength="8"
-        button type="submit" Register
+        input.text-input type="text" name="email" placeholder="Email"
+        input.text-input type="password" name="password" placeholder="Password" minlength="8" id="password"
+        input.text-input type="password" name="confirmation" placeholder="Confirm Password" minlength="8" id="confirm-password"
+        input.text-input type="text" name="rsn" placeholder="Runescape Username"
+        div
+          button type="submit" Register
+  script src="/js/account/new.js"

@@ -11,3 +11,9 @@ main {
 button {
   margin-top: 10px;
 }
+
+input.text-input {
+    display: inline-block;
+    width: 25vw; 
+    margin-left: 10px;
+}

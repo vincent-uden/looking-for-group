@@ -1,0 +1,12 @@
+link rel="stylesheet" href="/css/boss.css"
+main
+  .panel
+    h1 =@boss_name
+    aside.left
+      p X people are interested in this boss.
+      / if interested
+      p 
+        strong You 
+        |are interested in this boss.
+    aside.right
+      img src=@boss_image
