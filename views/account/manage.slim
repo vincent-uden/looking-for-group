@@ -1,0 +1,17 @@
+link rel="stylesheet" type="text/css" href="/css/account/manage.css"
+main
+  .panel
+    h1 Manage Account Settings
+    .dropdown
+      h2 id="title1" Boss Interests 
+      .arrow id="arrow1"
+        i.material-icons keyboard_arrow_down
+      .expandable id="dropdown1"
+        form action="/account/boss_settings"
+          - for boss in @bosses
+            .row
+              input.checkbox type="checkbox" id=boss.name name=boss.name
+              label for=boss.name =boss.name
+          button type="submit" Save boss settings
+    h2 More Stuff
+script src="/js/account/manage.js"

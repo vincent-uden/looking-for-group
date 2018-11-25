@@ -42,7 +42,21 @@ h1 {
     margin-right: 30px;
 }
 
+h2 {
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: #313131;
+}
+
 p {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+label {
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
     font-weight: 400;

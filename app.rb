@@ -2,7 +2,7 @@ require_relative './config/environment'
 
 class App < Sinatra::Base
   @@boss_image_path = '/img/boss/'
-
+# --------------------------------- Sessions --------------------------------- #
   enable :sessions
 
   post '/login' do
@@ -24,19 +24,19 @@ class App < Sinatra::Base
     session.destroy
     redirect '/'
   end
-
+# ------------------------------- Sessions end ------------------------------- #
   get '/' do
     if session[:user_id]
       @current_user = User.get(session[:user_id])
     end
     slim :index
   end
-
+  # Create new user page
   get '/account/new' do
     @current_user = true
     slim :'account/new'
   end
-
+  # Create account confirmation
   post '/account/new' do
     p params
     username = params['username']
@@ -49,7 +49,21 @@ class App < Sinatra::Base
     Database::insert_user(db, username, BCrypt::Password.create(password), email, profile_img, rsn)
     redirect '/'
   end
-
+  # Manage account page
+  get '/account/manage' do
+    if session[:user_id]
+      @current_user = User.get(session[:user_id])
+    end
+    db = SQLite3::Database.new('./database/user_data.db')
+    db.results_as_hash = true
+    results = db.execute('SELECT * FROM bosses')
+    @bosses = []
+    results.each do |row|
+      @bosses << Boss.new(row)
+    end
+    slim :'account/manage'
+  end
+  # Boss information page
   get '/boss/:boss_id' do
     if session[:user_id]
       @current_user = User.get(session[:user_id])
