@@ -18,7 +18,8 @@ class User
   end
 
   def self.null_user()
-    User.new({'username'    => nil,
+    User.new({'id'          => nil,
+              'username'    => '',
               'password'    => nil,
               'email'       => nil,
               'profile_img' => nil,
