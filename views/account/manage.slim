@@ -4,9 +4,7 @@ main
     h1 Manage Account Settings
     .dropdown
       h2 id="title1" Boss Interests 
-      .arrow id="arrow1"
-        i.material-icons keyboard_arrow_down
-      .expandable id="dropdown1"
+      .subdiv
         form action="/account/boss_settings"
           - for boss in @bosses
             .row

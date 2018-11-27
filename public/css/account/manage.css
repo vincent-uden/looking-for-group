@@ -12,42 +12,6 @@ main>.panel>h1 {
     margin-left: 30px;
 }
 
-.dropdown {
-    margin-left: 40px;
-    margin-right: 40px;
-}
-
-.dropdown>h2 {
-    display: inline-block;
-    width: 80%;
-}
-
-.dropdown>.arrow {
-    display: inline-block;
-    text-align: right;
-    width: 20%;
-}
-
-.dropdown i.material-icons {
-    font-size: 50px;
-    vertical-align: middle;
-    transform: translateY(-5px);
-    color: #2f65bc;
-}
-
-.dropdown label {
-    margin-left: 10px;
-}
-
-.dropdown input.checkbox {
-    margin-bottom: 10px;
-}
-
-.expandable {
-    padding-top: 20px;
+.subdiv {
     border-top: 1px solid #313131;
-
-    overflow: hidden;
-    transition: height 0.3s ease-out;
-    height: auto;
 }

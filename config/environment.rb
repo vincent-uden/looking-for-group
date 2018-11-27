@@ -3,13 +3,14 @@ require_relative '../database/models/user'
 require_relative '../database/models/boss'
 require_relative '../highscore_api'
 
-require 'sqlite3'
-require 'bcrypt'
+#require 'sqlite3'
+#require 'bcrypt'
+#require ''
 
 p "------------------"
 p "-   Restarting   -"
 p "------------------"
-db = SQLite3::Database.new './database/user_data.db'
+db = Database
 #Database::clear db
 #Database::insert_bosses(db)
 

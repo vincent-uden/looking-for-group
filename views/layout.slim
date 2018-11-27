@@ -6,12 +6,13 @@ html
     link href="https://fonts.googleapis.com/css?family=Roboto:100, 400" rel="stylesheet"
     link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
   body
+    - byebug
     - if @current_user
       nav
         .panel
           form action="/" method="get"
             button.nav type="submit" Home
-          form action="/" method="get"
+          form action="/account/manage" method="get"
             button.nav type="submit" Account
           form action="/logout" method="post"
             button.nav type="submit" Log out
