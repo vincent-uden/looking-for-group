@@ -63,6 +63,15 @@ class App < Sinatra::Base
     slim :'account/manage'
   end
 
+  # Change boss interests
+  post '/account/boss_settings' do
+    p '### BOSS SETTINGS ###'
+    p params
+    p session[:user_id]
+    Database.update_users_interests(session[:user_id], params)
+    redirect '/account/manage'
+  end
+
   # Boss information page
   get '/boss/:boss_id' do
     boss_data = Database.get_boss(params['boss_id'])

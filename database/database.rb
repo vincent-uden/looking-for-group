@@ -6,43 +6,47 @@ class Database
     @@db.execute(*args)
   end
 
-  def self.clear()
-    execute('DROP TABLE IF EXISTS users')
-    execute('CREATE TABLE users
-      (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(40) NOT NULL,
-       password VARCHAR(40) NOT NULL,
-       email VARCHAR(100) NOT NULL,
-       profile_img VARCHAR(40),
-       rsn VARCHAR(40),
-       stat_id INTEGER,
-       FOREIGN KEY(stat_id) REFERENCES stats(id))')
-    
-    execute('DROP TABLE IF EXISTS stats')
-    execute('CREATE TABLE stats
-      (id INTEGER PRIMARY KEY AUTOINCREMENT,
-       attack INTEGER,
-       defence INTEGER,
-       strength INTEGER,
-       hitpoints INTEGER,
-       ranged INTEGER,
-       prayer INTEGER,
-       magic INTEGER,
-       mining INTEGER,
-       herblore INTEGER,
-       thieving INTEGER,
-       farming INTEGER)')
-
-    execute('DROP TABLE IF EXISTS bosses')
-    execute('CREATE TABLE bosses
-      (id INTEGER PRIMARY KEY AUTOINCREMENT,
-       name VARCHAR(60) NOT NULL,
-       boss_img VARCHAR(40),
-       wiki_link VARCHAR(255))')
-
-    execute('DROP TABLE IF EXISTS user_boss_interests')
-    execute('CREATE TABLE user_boss_interests
-      (user_id INTEGER NOT NULL,
-       boss_id INTEGER NOT NULL)')
+  def self.clear(tables)
+    if tables.include? 'users'
+      execute('DROP TABLE IF EXISTS users')
+      execute('CREATE TABLE users
+        (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(40) NOT NULL,
+         password VARCHAR(40) NOT NULL,
+         email VARCHAR(100) NOT NULL,
+         profile_img VARCHAR(40),
+         rsn VARCHAR(40),
+         stat_id INTEGER,
+         FOREIGN KEY(stat_id) REFERENCES stats(id))')
+    elsif tables.include? 'stats'
+      execute('DROP TABLE IF EXISTS stats')
+      execute('CREATE TABLE stats
+        (id INTEGER PRIMARY KEY AUTOINCREMENT,
+         attack INTEGER,
+         defence INTEGER,
+         strength INTEGER,
+         hitpoints INTEGER,
+         ranged INTEGER,
+         prayer INTEGER,
+         magic INTEGER,
+         mining INTEGER,
+         herblore INTEGER,
+         thieving INTEGER,
+         farming INTEGER)')
+    elsif tables.include? 'bosses'
+      execute('DROP TABLE IF EXISTS bosses')
+      execute('CREATE TABLE bosses
+        (id INTEGER PRIMARY KEY AUTOINCREMENT,
+         name VARCHAR(60) NOT NULL,
+         boss_img VARCHAR(40),
+         wiki_link VARCHAR(255))')
+    elsif tables.include? 'user_boss_interests'
+      execute('DROP TABLE IF EXISTS user_boss_interests')
+      execute('CREATE TABLE user_boss_interests
+        (user_id INTEGER NOT NULL,
+         boss_id INTEGER NOT NULL,
+         FOREIGN KEY(user_id) REFERENCES users(id),
+         FOREIGN KEY(boss_id) REFERENCES bosses(id))')
+    end
   end
 
   def self.insert_user(username, hashed_pwd, email, profile_img, rsn)
@@ -129,23 +133,23 @@ class Database
     return bosses
   end
 
-  #def self.get_boss_by_id(id)
-    #boss_data = execute('SELECT * FROM bosses
-                        #WHERE id = ?', id)[0]
-  #end
-
-  def self.method_missing(*args, &blk)
-    case args[0]
-    when :get_boss
-      argument = args[1].to_i
-      if argument != 0 # Get boss by id
-        return Boss.new(execute('SELECT * FROM bosses 
-                                 WHERE id = ?', argument)[0])
-      else # Get boss by name
-        return Boss.new(execute('SELECT * FROM bosses 
-                                 WHERE name = ?', args[1])[0])
-      end
+  def self.get_boss(identfier)
+    argument = identfier.to_i
+    if argument != 0 # Get boss by id
+      return Boss.new(execute('SELECT * FROM bosses 
+                               WHERE id = ?', argument)[0])
+    else # Get boss by name
+      return Boss.new(execute('SELECT * FROM bosses 
+                               WHERE name = ?', args[1])[0])
     end
   end
 
+  def self.update_users_interests(user_id, interests)
+    execute('DELETE FROM user_boss_interests
+             WHERE user_id = ?', user_id)
+    interests.each do |row|
+      execute('INSERT INTO user_boss_interests 
+              values (?, ?)', [user_id.to_i, row[0].to_i])
+    end
+  end
 end

@@ -5,10 +5,10 @@ main
     .dropdown
       h2 id="title1" Boss Interests 
       .subdiv
-        form action="/account/boss_settings"
+        form action="/account/boss_settings" method="post"
           - for boss in @bosses
             .row
-              input.checkbox type="checkbox" id=boss.name name=boss.name
+              input.checkbox type="checkbox" id=boss.name name=boss.id
               label for=boss.name =boss.name
           button type="submit" Save boss settings
     h2 More Stuff

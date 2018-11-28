@@ -4,14 +4,17 @@ main {
     padding-top: 10vh;
 }
 
-.panel>* {
+main>.panel>* {
     margin-left: 40px;
+    margin-right: 40px;
 }
 
 main>.panel>h1 {
     margin-left: 30px;
+    margin-right: 30px;
 }
 
 .subdiv {
     border-top: 1px solid #313131;
+    padding-top: 20px;
 }
