@@ -8,6 +8,8 @@ class App < Sinatra::Base
   enable :sessions
 
   post '/login' do
+    # user = User.login(params, self)
+    # sinatra - flash
     user = Database.get_user_by_name(params['username'])
     hashed_password = BCrypt::Password.new(user.password)
     if hashed_password == params['password']
@@ -38,6 +40,10 @@ class App < Sinatra::Base
     slim :index
   end
 
+  get '/css/*.css' do |var|
+    scss ('scss/' + var).to_sym
+  end
+
   # Create new user page
   get '/account/new' do
     @current_user = User.new({'id' => true})
@@ -53,7 +59,7 @@ class App < Sinatra::Base
     email = params['email']
     profile_img = nil
     rsn = params['rsn']
-    Database::insert_user(username, BCrypt::Password.create(password), email, profile_img, rsn)
+    Database.insert_user(username, BCrypt::Password.create(password), email, profile_img, rsn)
     redirect '/'
   end
 

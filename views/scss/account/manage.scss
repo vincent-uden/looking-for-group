@@ -1,0 +1,58 @@
+@import '../vars';
+main {
+    width: 60vw;
+    margin-left: 20vw;
+    padding-top: 10vh;
+}
+
+main>.panel>* {
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+main>.panel>h1 {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+h2 {
+    border-bottom: 1px solid #313131;
+}
+
+.darkModeSwitch {
+    display: inline-block;
+    vertical-align: middle;
+
+    width: 5vw;
+    height: 2vw;
+
+    background-color: #99c0ff;
+    border: 3px solid #2f65bc;
+    border-radius: 2vw;
+
+    padding: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+
+    .slider {
+        background-color: #fff;
+        box-shadow: 0px 3px 3px 0px #00000050;
+        width: 1.5vw;
+        height: 1.5vw;
+        margin: 0;
+        border-radius: 1vw;
+        transform: translateY(0.25vw) translateX(0.25vw);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .slidd {
+        transform: translateY(0.25vw) translateX(3.25vw);
+    }
+}
+
+.toggleSwitch {
+    p {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}

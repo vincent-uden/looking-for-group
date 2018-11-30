@@ -1,5 +1,5 @@
 class User
-  attr_reader :id, :username, :password, :email, :profile_img, :rsn, :stats_id
+  attr_reader :id, :username, :password, :email, :profile_img, :rsn, :stats_id, :dark_mode
   def initialize(db_hash)
     @id = db_hash['id']
     @username = db_hash['username']
@@ -8,6 +8,7 @@ class User
     @profile_img = db_hash['profile_img']
     @rsn = db_hash['rsn']
     @stats_id = db_hash['stats_id']
+    @dark_mode = db_hash['dark_mode']
   end
 
   def self.get(id)
@@ -24,7 +25,8 @@ class User
               'email'       => nil,
               'profile_img' => nil,
               'rsn'         => nil,
-              'stats_id'    => nil
+              'stats_id'    => nil,
+              'dark_mode'   => 0
               })
   end
 end

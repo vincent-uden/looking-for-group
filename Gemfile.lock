@@ -19,6 +19,11 @@ GEM
     rerun (0.13.0)
       listen (~> 3.0)
     ruby_dep (1.5.0)
+    sass (3.7.2)
+      sass-listen (~> 4.0.0)
+    sass-listen (4.0.0)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
     sinatra (2.0.4)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -39,6 +44,7 @@ DEPENDENCIES
   bcrypt
   byebug
   rerun
+  sass
   sinatra
   slim
   sqlite3

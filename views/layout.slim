@@ -5,7 +5,7 @@ html
     link rel="stylesheet" type="text/css" href="/css/main.css"
     link href="https://fonts.googleapis.com/css?family=Roboto:100, 400" rel="stylesheet"
     link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
-  body
+  body class=(@current_user.dark_mode ? 'light' : 'dark')
     - if @current_user.id
       nav
         .panel
