@@ -8,16 +8,8 @@ class App < Sinatra::Base
   enable :sessions
 
   post '/login' do
-    # user = User.login(params, self)
     # sinatra - flash
-    user = Database.get_user_by_name(params['username'])
-    hashed_password = BCrypt::Password.new(user.password)
-    if hashed_password == params['password']
-      session[:user_id] = user.id
-      p "Success"
-    else
-      p "Fail"
-    end
+    User.login params['username'], params['password'], session
     redirect back
   end
 
@@ -30,7 +22,7 @@ class App < Sinatra::Base
 
   before do
     if session[:user_id]
-      @current_user = User.get(session[:user_id])
+      @current_user = User.get(id: session[:user_id])
     else
       @current_user = User.null_user
     end
