@@ -100,10 +100,6 @@ class Table
 end
 
 class User < Table
-  #attr_reader :id, :username, :password, :email, :profile_img, :rsn, :stats_id, :dark_mode
-  
-  #columns 'stats_id'
-  
   table_name 'users'
   def initialize(db_hash)
     super()
@@ -116,6 +112,7 @@ class User < Table
     column :rsn, :string40
     belongs_to :stats, 'stats' #has_many :users 
     column :dark_mode, :int
+
     set_id db_hash['id']
     set_username db_hash['username']
     set_password db_hash['password']
@@ -157,5 +154,30 @@ class User < Table
               'stats_id'    => nil,
               'dark_mode'   => 0
               })
+  end
+end
+
+class Boss < Table
+  table_name 'bosses'
+  def initialize(db_hash)
+    super()
+    column :id, :prim_key
+    column :name, :string60, :no_null
+    column :boss_img, :string40
+    column :wiki_link, :string255
+
+    set_id db_hash['id']
+    set_name db_hash['name']
+    set_boss_img db_hash['boss_img']
+    set_wiki_link db_hash['wiki_link']
+  end
+
+  def self.get(identifier)
+    if identifier[:id]
+      result = Database.execute("SELECT * FROM #{get_table_name} WHERE id = ?", identifier[:id])[0]
+    elsif identifier[:name]
+      result = Database.execute("SELECT * FROM #{get_table_name} WHERE name = ?", identifier[:name])[0]
+    end
+    Boss.new(result)
   end
 end

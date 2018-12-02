@@ -57,7 +57,7 @@ class App < Sinatra::Base
 
   # Manage account page
   get '/account/manage' do
-    @bosses = Database::get_bosses
+    @bosses = Database.get_bosses
     slim :'account/manage'
   end
 
@@ -72,9 +72,9 @@ class App < Sinatra::Base
 
   # Boss information page
   get '/boss/:boss_id' do
-    boss_data = Database.get_boss(params['boss_id'])
-    @boss_name = boss_data.name
-    @boss_image = @@boss_image_path + boss_data.boss_img
+    boss_data = Database.get_boss params['boss_id']
+    @boss_name = boss_data.get_name
+    @boss_image = @@boss_image_path + boss_data.get_boss_img
     slim :'boss/boss_page'
   end
 end

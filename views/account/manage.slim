@@ -8,8 +8,8 @@ main
         form action="/account/boss_settings" method="post"
           - for boss in @bosses
             .row
-              input.checkbox type="checkbox" id=boss.name name=boss.id
-              label for=boss.name =boss.name
+              input.checkbox type="checkbox" id=boss.get_name name=boss.get_id
+              label for=boss.get_name =boss.get_name
           button type="submit" Save boss settings
     h2 Dark mode
     .toggleSwitch
