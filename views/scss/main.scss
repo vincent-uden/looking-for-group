@@ -51,6 +51,14 @@ body {
         color: $light_font_color;
     }
 
+    h3 {
+        text-align: left;
+        font-family: 'Roboto', sans-serif;
+        font-size: 20px;
+        font-weight: 400;
+        color: $light_font_color;
+    }
+
     p {
         font-family: 'Roboto', sans-serif;
         font-size: 18px;
@@ -129,6 +137,10 @@ body.dark {
     }
 
     h2 {
+        color: $dark_font_color;
+    }
+
+    h3 {
         color: $dark_font_color;
     }
 

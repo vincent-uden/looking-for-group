@@ -28,8 +28,9 @@ class Column
 end
 
 class Table
+
   def initialize
-    @columns = []
+    @column_values = []
   end
 
   def self.table_name(name)
@@ -40,13 +41,16 @@ class Table
     @table_name
   end
 
-  def column(*args)
+  def self.column(*args)
+    if @columns == nil
+      @columns = []
+    end
     if args[1] == :prim_key # Autoincrementing primary key
       @columns << (Column.new args[0], prim_key: true)
     else # Arg[1] will be datatype
       options = {}
-      options[:no_null] = true if args.include? :no_null
-      options[:unique]  = true if args.include? :unique
+      options[:no_null] = args.include? :no_null
+      options[:unique]  = args.include? :unique
       if args.include? :foreign_key
         i = -1
         # Find foreign key flag index
@@ -63,22 +67,30 @@ class Table
     end
   end
 
+  def self.get_columns
+    @columns
+  end
+
+  def self.belongs_to(table_name, name)
+    column (name.to_s + '_id').to_sym, :foreign_key, table_name
+  end
+
   def method_missing(method_name, *args, &blk)
-    # Get value in column
-    if method_name.to_s[0..3] == "get_"
+    p method_name
+    if method_name.to_s[0..3] == "get_" # Get value in column
       col_name = method_name.to_s[4..-1]
-      @columns.each do |col|
+      self.class.get_columns.each_with_index do |col, index|
         if col.name == col_name.to_sym
-          return col.get_val
+          return @column_values[index]
         end
       end
       raise "Column #{col_name} does not exist"
     # Set value in column
     elsif method_name.to_s[0..3] == "set_"
       col_name = method_name.to_s[4..-1]
-      @columns.each do |col|
+      self.class.get_columns.each_with_index do |col, index|
         if col.name == col_name.to_sym
-          col.set_val args[0]
+          @column_values[index] = args[0]
           return
         end
       end
@@ -86,13 +98,24 @@ class Table
     end
   end
 
-  def belongs_to(table_name, name)
-    column (name.to_s + '_id').to_sym, :foreign_key, table_name
+
+  # MAKE STATIC METHOD  # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+  # Convert columns to class variables but not the values in the columns
+  def insert(values)
+    query = "INSERT INTO #{get_table_name} ("
+    # Fråga Daniel om each vs map
+    self.class.get_columns.each do |col|
+      output += col.name.to_s + ", "
+    end
+    output = output[0..-2]
+    output += ")"
+    p output
   end
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
   def to_s
     output = "TABLE: #{self.class.get_table_name}\n"
-    @columns.each do |col|
+    get_columns.each do |col|
       output += col.to_s
     end
     return output
@@ -101,17 +124,16 @@ end
 
 class User < Table
   table_name 'users'
+  column :id, :prim_key
+  column :username, :string40, :no_null, :unique
+  column :password, :string40, :no_null
+  column :email, :string100, :no_null
+  column :profile_img, :string40
+  column :rsn, :string40
+  belongs_to :stats, 'stats' #has_many :users 
+  column :dark_mode, :int
   def initialize(db_hash)
     super()
-    # Fråga Daniel om kolumner som class/instance variabler
-    column :id, :prim_key
-    column :username, :string40, :no_null, :unique
-    column :password, :string40, :no_null
-    column :email, :string100, :no_null
-    column :profile_img, :string40
-    column :rsn, :string40
-    belongs_to :stats, 'stats' #has_many :users 
-    column :dark_mode, :int
 
     set_id db_hash['id']
     set_username db_hash['username']
@@ -159,12 +181,12 @@ end
 
 class Boss < Table
   table_name 'bosses'
+  column :id, :prim_key
+  column :name, :string60, :no_null
+  column :boss_img, :string40
+  column :wiki_link, :string255
   def initialize(db_hash)
     super()
-    column :id, :prim_key
-    column :name, :string60, :no_null
-    column :boss_img, :string40
-    column :wiki_link, :string255
 
     set_id db_hash['id']
     set_name db_hash['name']

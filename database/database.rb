@@ -51,8 +51,8 @@ class Database
 
   def self.insert_user(username, hashed_pwd, email, profile_img, rsn)
     stat_id = insert_stats(rsn)[0]
-    execute('INSERT INTO users (username, password, email, profile_img, rsn, stat_id) VALUES (?, ?, ?, ?, ?, ?)', 
-      [username, hashed_pwd, email, profile_img, rsn, stat_id])
+    execute('INSERT INTO users (username, password, email, profile_img, rsn, stat_id, dark_mode) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+      [username, hashed_pwd, email, profile_img, rsn, stat_id, 0])
   end
 
   # Returns the inserted row
