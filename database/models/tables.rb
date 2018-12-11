@@ -76,7 +76,6 @@ class Table
   end
 
   def method_missing(method_name, *args, &blk)
-    p method_name
     if method_name.to_s[0..3] == "get_" # Get value in column
       col_name = method_name.to_s[4..-1]
       self.class.get_columns.each_with_index do |col, index|
@@ -96,22 +95,47 @@ class Table
       end
       raise "Column #{col_name} does not exist"
     end
+    super(method_name, *args, &blk)
   end
 
-
-  # MAKE STATIC METHOD  # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-  # Convert columns to class variables but not the values in the columns
   def insert(values)
-    query = "INSERT INTO #{get_table_name} ("
+    query = "INSERT INTO #{self.class.get_table_name} ("
     # Fråga Daniel om each vs map
     self.class.get_columns.each do |col|
-      output += col.name.to_s + ", "
+      query += col.name.to_s + ", "
     end
-    output = output[0..-2]
-    output += ")"
-    p output
+    query = query[0..-2]
+    query += ")"
+    p query
   end
-  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+  def select_all(options)
+    query = "SELECT * FROM #{self.class.get_table_name} "
+    if options[:where]
+      query += "WHERE " + options[:where]
+    end
+    execute(query, options[:values])
+  end
+
+  def save(*args)
+    query = "UPDATE #{self.class.get_table_name} SET "
+    query = self.class.get_columns.inject(query) do |acc, col|
+      acc + col.name.to_s + " = ?, "
+    end
+    query = query[0..-3] # remove last =?,
+    if args.length == 0
+      id_col = self.class.get_columns.select do |col|
+        col.name == :id
+      end
+      id_col = id_col[0].name.to_s
+    else
+      id_col = args[0]
+    end
+    query += " WHERE #{id_col.to_s} = ?"
+    Database.execute(query, @column_values + [@column_values.first])
+    p query
+    puts @column_values
+  end
 
   def to_s
     output = "TABLE: #{self.class.get_table_name}\n"
@@ -130,7 +154,7 @@ class User < Table
   column :email, :string100, :no_null
   column :profile_img, :string40
   column :rsn, :string40
-  belongs_to :stats, 'stats' #has_many :users 
+  belongs_to :stats, 'stat' #has_many :users 
   column :dark_mode, :int
   def initialize(db_hash)
     super()
@@ -141,7 +165,7 @@ class User < Table
     set_email db_hash['email']
     set_profile_img db_hash['profile_img']
     set_rsn db_hash['rsn']
-    set_stats_id db_hash['stats_id']
+    set_stat_id db_hash['stat_id']
     set_dark_mode db_hash['dark_mode']
     # ------------------- #
   end
@@ -201,5 +225,22 @@ class Boss < Table
       result = Database.execute("SELECT * FROM #{get_table_name} WHERE name = ?", identifier[:name])[0]
     end
     Boss.new(result)
+  end
+end
+
+class UserBossInterest < Table
+  table_name 'user_boss_interests'
+  column :user_id, :int, :no_null
+  column :boss_id, :int, :no_null
+
+  def initialize(db_hash)
+    super()
+
+    set_user_id db_hash['user_id']
+    set_boss_id db_hash['boss_id']
+  end
+
+  def self.get_users_interests(user_id)
+    #TODO: Create thisc
   end
 end

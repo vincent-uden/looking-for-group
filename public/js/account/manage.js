@@ -1,7 +1,24 @@
+// Adding click event to dark mode toggle
 var element = document.querySelector("#darkModeSwitch");
-console.log("Test");
-console.log(element);
+var slider = document.querySelector("#darkSlider");
+var checkbox = document.querySelector("#darkModeCheckBox");
 element.addEventListener("click", function() {
-    var slider = document.querySelector("#darkSlider");
     slider.classList.toggle("slidd");
+    if (checkbox.checked) {
+        checkbox.checked = false;
+    } else {
+        checkbox.checked = true;
+    }
+    submitDarkMode();
 })
+
+window.onload = function() {
+    var main = document.querySelector(".preload");
+    main.classList.remove("preload");
+}
+
+function submitDarkMode() {
+    var form = document.querySelector("#darkModeForm");
+    form.submit();
+}
+

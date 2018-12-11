@@ -175,3 +175,17 @@ body.dark {
             -webkit-text-fill-color: $dark_font_color !important;
     }
 }
+
+.hidden {
+    display: none;
+    * {
+        display: none;
+    }
+}
+
+.preload * {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  -o-transition: none !important;
+}

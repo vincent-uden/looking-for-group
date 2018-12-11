@@ -41,12 +41,12 @@ h2 {
         height: 1.5vw;
         margin: 0;
         border-radius: 1vw;
-        transform: translateY(0.25vw) translateX(0.25vw);
-        transition: transform 0.3s ease-in-out;
+        -webkit-transform: translateY(0.25vw) translateX(0.25vw);
+        -webkit-transition: transform 0.3s ease-in-out;
     }
 
     .slidd {
-        transform: translateY(0.25vw) translateX(3.25vw);
+        -webkit-transform: translateY(0.25vw) translateX(3.25vw);
     }
 }
 

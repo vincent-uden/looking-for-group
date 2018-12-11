@@ -70,6 +70,12 @@ class App < Sinatra::Base
     redirect '/account/manage'
   end
 
+  post '/account/dark_mode' do
+    @current_user.set_dark_mode (@current_user.get_dark_mode == 1 ? 0 : 1)
+    @current_user.save
+    redirect back
+  end
+
   # Boss information page
   get '/boss/:boss_id' do
     boss_data = Database.get_boss params['boss_id']
