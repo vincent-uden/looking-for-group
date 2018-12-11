@@ -109,12 +109,12 @@ class Table
     p query
   end
 
-  def select_all(options)
-    query = "SELECT * FROM #{self.class.get_table_name} "
+  def self.select_all(options)
+    query = "SELECT * FROM #{get_table_name} "
     if options[:where]
       query += "WHERE " + options[:where]
     end
-    execute(query, options[:values])
+    Database.execute(query, options[:values])
   end
 
   def save(*args)
@@ -201,6 +201,10 @@ class User < Table
               'dark_mode'   => 0
               })
   end
+
+  def get_interests
+    UserBossInterest.get_users_interests get_id
+  end
 end
 
 class Boss < Table
@@ -241,6 +245,6 @@ class UserBossInterest < Table
   end
 
   def self.get_users_interests(user_id)
-    #TODO: Create thisc
+    result = select_all where: "user_id = ?", values: [user_id]
   end
 end

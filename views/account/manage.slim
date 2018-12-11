@@ -8,7 +8,11 @@ main.preload
         form action="/account/boss_settings" method="post"
           - for boss in @bosses
             .row
-              input.checkbox type="checkbox" id=boss.get_name name=boss.get_id
+              / If current user has this boss as an interest
+              - if (@interests.inject([]) { |acc, row| acc << row["boss_id"] }).include? boss.get_id
+                input.checkbox type="checkbox" id=boss.get_name name=boss.get_id checked=""
+              - else
+                input.checkbox type="checkbox" id=boss.get_name name=boss.get_id 
               label for=boss.get_name =boss.get_name
           button type="submit" Save boss settings
     h2 Preferences

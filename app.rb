@@ -58,6 +58,8 @@ class App < Sinatra::Base
   # Manage account page
   get '/account/manage' do
     @bosses = Database.get_bosses
+    # To prevent several calls to database
+    @interests = @current_user.get_interests
     slim :'account/manage'
   end
 
