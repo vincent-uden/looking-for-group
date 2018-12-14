@@ -152,7 +152,6 @@ class User < Table
   column :username, :string40, :no_null, :unique
   column :password, :string40, :no_null
   column :email, :string100, :no_null
-  column :profile_img, :string40
   column :rsn, :string40
   belongs_to :stats, 'stat' #has_many :users 
   column :dark_mode, :int
@@ -163,7 +162,6 @@ class User < Table
     set_username db_hash['username']
     set_password db_hash['password']
     set_email db_hash['email']
-    set_profile_img db_hash['profile_img']
     set_rsn db_hash['rsn']
     set_stat_id db_hash['stat_id']
     set_dark_mode db_hash['dark_mode']
@@ -195,7 +193,6 @@ class User < Table
               'username'    => '',
               'password'    => nil,
               'email'       => nil,
-              'profile_img' => nil,
               'rsn'         => nil,
               'stats_id'    => nil,
               'dark_mode'   => 0
@@ -204,6 +201,28 @@ class User < Table
 
   def get_interests
     UserBossInterest.get_users_interests get_id
+  end
+
+  def save_profile_image(filename, tmp_file)
+    ext = File.extname(filename)
+    new_file_name = get_id.to_s + ext
+    image_dir = "./public/img/profile_imgs/"
+    File.open(image_dir + new_file_name, "wb") do |f|
+      f.write(tmp_file.read)
+    end
+  end
+
+  def get_profile_img
+    image_dir = "./public/img/profile_imgs/"
+    external_image_dir = "/img/profile_imgs/"
+    all_imgs = Dir.entries(image_dir)
+    image_name = ""
+    all_imgs.each do |img|
+      if File.basename(img, ".*") == get_id.to_s
+        image_name = external_image_dir + img
+      end
+    end
+    return image_name
   end
 end
 
