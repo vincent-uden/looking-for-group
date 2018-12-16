@@ -1,0 +1,23 @@
+@import '../vars';
+
+main {
+    width: 60vw;
+    margin-left: 20vw;
+    padding-top: 10vh;
+}
+
+main>.panel>* {
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+main>.panel>h1 {
+    margin-left: 30px;
+    margin-right: 30px;
+
+}
+
+.list_header {
+    display: grid;
+    grid-template-columns: 3fr repeat(7, 2fr);
+}

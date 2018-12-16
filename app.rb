@@ -87,4 +87,8 @@ class App < Sinatra::Base
     @boss_image = @@boss_image_path + boss_data.get_boss_img
     slim :'boss/boss_page'
   end
+
+  get '/explore/find_teammates' do
+    slim :'explore/find_teammates'
+  end
 end

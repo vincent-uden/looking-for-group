@@ -267,3 +267,34 @@ class UserBossInterest < Table
     result = select_all where: "user_id = ?", values: [user_id]
   end
 end
+
+class Stat < Table
+  table_name "stats"
+  column :id, :prim_key
+  column :attack, :int
+  column :defence, :int
+  column :strength, :int
+  column :hitpoints, :int
+  column :ranged, :int
+  column :prayer, :int
+  column :magic, :int
+  column :mining, :int
+  column :herblore, :int
+  column :thieving, :int
+  column :farming, :int
+  def initialize(db_hash)
+    super()
+
+    set_attack db_hash['attack']
+    set_defence db_hash['defence']
+    set_strength db_hash['strength']
+    set_hitpoints db_hash['hitpoints']
+    set_ranged db_hash['ranged']
+    set_prayer db_hash['prayer']
+    set_magic db_hash['magic']
+    set_mining db_hash['mining']
+    set_herblore db_hash['herblore']
+    set_thieving db_hash['thieving']
+    set_farming db_hash['farming']
+  end
+end
