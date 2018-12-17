@@ -150,6 +150,7 @@ class Table
     end
     return output
   end
+
 end
 
 class User < Table
@@ -234,6 +235,22 @@ class User < Table
   def get_stats
     result = Stats.select_all where: "id = ?", values: [get_stat_id]
     Stats.new result[0]
+  end
+
+  def get_other_user_stat_pairs
+    if get_id
+      result = User.select_all join: 'stats', on: 'users.id = stats.id', 
+                               where: "users.id != #{get_id}"
+      models = result.map do |row|
+        User.new row
+      end
+      stats = result.map do |row|
+        Stat.new row
+      end
+      models.zip stats
+    else
+      return []
+    end
   end
 end
 

@@ -89,7 +89,7 @@ class App < Sinatra::Base
   end
 
   get '/explore/find_teammates' do
-    @users = User.select_all join: 'stats', on: 'users.id = stats.id # TODO:
+    @pairs = @current_user.get_other_user_stat_pairs
     slim :'explore/find_teammates'
   end
 end

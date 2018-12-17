@@ -5,11 +5,24 @@ main.preload
     .panel
       .list_header
         label Name
-        label Attack
-        label Strength
-        label Defence
-        label Hitpoints
-        label Ranged
-        label Magic
-        label Prayer
+        label.stat Attack
+        label.stat Strength
+        label.stat Defence
+        label.stat Hitpoints
+        label.stat Ranged
+        label.stat Magic
+        label.stat Prayer
       .people_list
+        ul
+        - odd = false
+        - for pair in @pairs
+          - odd = !odd
+          li class=(odd ? "light" : "dark")
+            label =pair[0].get_username
+            label.stat =pair[1].get_attack
+            label.stat =pair[1].get_strength
+            label.stat =pair[1].get_defence
+            label.stat =pair[1].get_hitpoints
+            label.stat =pair[1].get_ranged
+            label.stat =pair[1].get_magic
+            label.stat =pair[1].get_prayer

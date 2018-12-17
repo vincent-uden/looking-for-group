@@ -17,7 +17,45 @@ main>.panel>h1 {
 
 }
 
+main>.panel>.panel {
+    padding: 0;
+}
+
 .list_header {
     display: grid;
     grid-template-columns: 3fr repeat(7, 2fr);
+    margin-bottom: 0;
+    background-color: #00000040;
+
+    &>*{
+        margin-bottom: 0;
+    }
+
+    padding: 10px;
+}
+
+.people_list {
+    margin-top: 0;
+}
+
+li {
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 3fr repeat(7, 2fr);
+}
+
+li.dark {
+    background-color: #00000030;
+}
+
+li.light {
+    background-color: #ffffff30;
+}
+
+label.stat {
+    text-align: right;
+}
+
+ul {
+    margin: 0;
 }
