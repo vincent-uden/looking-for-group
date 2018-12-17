@@ -1,0 +1,35 @@
+link rel="stylesheet" type="text/css" href="/css/explore/profile.css"
+main.preload
+  .panel
+    h1 =@profile_owner.get_username
+    img.profile_img src=@profile_owner.get_profile_img 
+    .stats_table
+      table
+        tr
+          td.skill_name Attack: 
+          td ="#{@profile_owner.get_stat_model.get_attack}"
+          td.skill_name Strength: 
+          td ="#{@profile_owner.get_stat_model.get_strength}"
+          td.skill_name Defence: 
+          td ="#{@profile_owner.get_stat_model.get_defence}"
+        tr
+          td.skill_name Hitpoints: 
+          td ="#{@profile_owner.get_stat_model.get_hitpoints}"
+          td.skill_name Ranged: 
+          td ="#{@profile_owner.get_stat_model.get_ranged}"
+          td.skill_name Magic: 
+          td ="#{@profile_owner.get_stat_model.get_magic}"
+        tr
+          td.skill_name Prayer: 
+          td ="#{@profile_owner.get_stat_model.get_prayer}"
+          td.skill_name Mining: 
+          td ="#{@profile_owner.get_stat_model.get_mining}"
+          td.skill_name Herblore: 
+          td ="#{@profile_owner.get_stat_model.get_herblore}"
+        tr
+          td.skill_name Thieving: 
+          td ="#{@profile_owner.get_stat_model.get_thieving}"
+          td.skill_name Farming: 
+          td ="#{@profile_owner.get_stat_model.get_farming}"
+    h2 ="#{@profile_owner.get_username} is interested in: "
+    / TODO: Create boss interests

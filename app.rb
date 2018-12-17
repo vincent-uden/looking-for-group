@@ -92,4 +92,9 @@ class App < Sinatra::Base
     @pairs = @current_user.get_other_user_stat_pairs
     slim :'explore/find_teammates'
   end
+
+  get '/explore/profile/:user_id' do
+      @profile_owner = User.get(id: params['user_id'], include_stats: true)
+      slim :'explore/profile'
+  end
 end

@@ -164,7 +164,7 @@ class User < Table
   column :dark_mode, :int
   def initialize(db_hash)
     super()
-
+    
     set_id db_hash['id']
     set_username db_hash['username']
     set_password db_hash['password']
@@ -187,12 +187,23 @@ class User < Table
   end
 
   def self.get(identifier)
-    if identifier[:id]
-      result = Database.execute("SELECT * FROM #{get_table_name} WHERE id = ?", identifier[:id])[0]
-    elsif identifier[:name]
-      result = Database.execute("SELECT * FROM #{get_table_name} WHERE username = ?", identifier[:name])[0]
+    options = identifier
+    if options[:include_stats]
+      if identifier[:id]
+        result = select_all join: 'stats', on: 'users.id = stats.id', where: "users.id = #{identifier[:id]}"
+      elsif identifier[:name]
+        result = select_all join: 'stats', on: 'users.id = stats.id', where: "username = #{identifier[:name]}"
+      end
+    else
+      if identifier[:id]
+        result = Database.execute("SELECT * FROM #{get_table_name} WHERE id = ?", identifier[:id])
+      elsif identifier[:name]
+        result = Database.execute("SELECT * FROM #{get_table_name} WHERE username = ?", identifier[:name])
+      end
     end
-    User.new(result)
+    user = User.new(result[0])
+    user.set_stat_model (Stat.new result[0])
+    user
   end
 
   def self.null_user()
@@ -235,6 +246,14 @@ class User < Table
   def get_stats
     result = Stats.select_all where: "id = ?", values: [get_stat_id]
     Stats.new result[0]
+  end
+
+  def set_stat_model(stats)
+    @stat_model = stats
+  end
+
+  def get_stat_model
+    @stat_model
   end
 
   def get_other_user_stat_pairs
