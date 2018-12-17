@@ -111,6 +111,12 @@ class Table
 
   def self.select_all(options)
     query = "SELECT * FROM #{get_table_name} "
+    if options[:join]
+      query += "JOIN " + options[:join] + " "
+      if options[:on]
+        query += "ON " + options[:on] + " "
+      end
+    end
     if options[:where]
       query += "WHERE " + options[:where]
     end
@@ -223,6 +229,11 @@ class User < Table
       end
     end
     return image_name
+  end
+
+  def get_stats
+    result = Stats.select_all where: "id = ?", values: [get_stat_id]
+    Stats.new result[0]
   end
 end
 
