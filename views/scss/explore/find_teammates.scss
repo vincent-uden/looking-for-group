@@ -48,8 +48,16 @@ li.dark {
     background-color: #00000030;
 }
 
+li.dark:hover {
+    background-color: #00000060;
+}
+
 li.light {
     background-color: #ffffff30;
+}
+
+li.light:hover {
+    background-color: #00000060;
 }
 
 label.stat {
@@ -58,4 +66,13 @@ label.stat {
 
 ul {
     margin: 0;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+
+    * {
+        cursor: pointer;
+    }
 }

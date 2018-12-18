@@ -172,6 +172,7 @@ class User < Table
     set_rsn db_hash['rsn']
     set_stat_id db_hash['stat_id']
     set_dark_mode db_hash['dark_mode']
+    @db_hash = db_hash
     # ------------------- #
   end
 
@@ -271,6 +272,10 @@ class User < Table
       return []
     end
   end
+
+  def get_db_hash
+    @db_hash
+  end
 end
 
 class Boss < Table
@@ -308,6 +313,14 @@ class UserBossInterest < Table
 
     set_user_id db_hash['user_id']
     set_boss_id db_hash['boss_id']
+  end
+
+  def self.get_bosses(user_id)
+    result = select_all join: 'bosses', on: 'boss_id = bosses.id', 
+                        where: "user_id = #{user_id}"
+    bosses = result.map do |row|
+      Boss.new row
+    end
   end
 
   def self.get_users_interests(user_id)

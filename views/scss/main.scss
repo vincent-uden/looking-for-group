@@ -112,8 +112,16 @@ body {
     table {
         th, td {
             font-family: $main_font; 
+            font-size: 20px;
+            padding-right: 10px;
             color: $light_font_color;
         }
+    }
+
+    li {
+        font-family: $main_font;
+        font-size: 20px;
+        color: $light_font_color;
     }
 } 
 

@@ -32,4 +32,9 @@ main.preload
           td.skill_name Farming: 
           td ="#{@profile_owner.get_stat_model.get_farming}"
     h2 ="#{@profile_owner.get_username} is interested in: "
-    / TODO: Create boss interests
+    ul
+      - for boss in @bosses
+        li =boss.get_name
+
+    form action="/explore/profile/add_friend" method="post"
+      input type="Submit" value="Send friend request"
