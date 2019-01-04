@@ -6,6 +6,7 @@ class App < Sinatra::Base
 # --------------------------------- Sessions --------------------------------- #
 
   enable :sessions
+  register Sinatra::Flash
 
   post '/login' do # sinatra - flash
     User.login params['username'], params['password'], session
@@ -98,4 +99,11 @@ class App < Sinatra::Base
     @bosses = UserBossInterest.get_bosses @profile_owner.get_id
     slim :'explore/profile'
   end
+
+  post '/explore/profile/add_friend/:user_id' do
+    @other_user = User.get(id: params['user_id'])
+    @current_user.add_friend @other_user
+    redirect back
+  end
 end
+

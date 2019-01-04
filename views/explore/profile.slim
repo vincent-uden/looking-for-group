@@ -36,5 +36,5 @@ main.preload
       - for boss in @bosses
         li =boss.get_name
 
-    form action="/explore/profile/add_friend" method="post"
+    form action="/explore/profile/add_friend/#{@profile_owner.get_id}" method="post"
       input type="Submit" value="Send friend request"

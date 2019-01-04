@@ -28,7 +28,7 @@ class Column
 end
 
 class Table
-
+  
   def initialize
     @column_values = []
   end
@@ -98,15 +98,19 @@ class Table
     super(method_name, *args, &blk)
   end
 
-  def insert(values)
-    query = "INSERT INTO #{self.class.get_table_name} ("
-    # Fråga Daniel om each vs map
-    self.class.get_columns.each do |col|
+  def self.insert(values)
+    query = "INSERT INTO #{get_table_name} ("
+    get_columns.each do |col|
       query += col.name.to_s + ", "
     end
-    query = query[0..-2]
+    query = query[0..-3]
+    query += ") VALUES ("
+    get_columns.each do |col|
+      query += "?, "
+    end
+    query = query[0..-3]
     query += ")"
-    p query
+    Database.execute query, values
   end
 
   def self.select_all(options)
@@ -124,11 +128,6 @@ class Table
   end
 
   def save(*args)
-    query = "UPDATE #{self.class.get_table_name} SET "
-    query = self.class.get_columns.inject(query) do |acc, col|
-      acc + col.name.to_s + " = ?, "
-    end
-    query = query[0..-3] # remove last =?,
     if args.length == 0
       id_col = self.class.get_columns.select do |col|
         col.name == :id
@@ -137,10 +136,16 @@ class Table
     else
       id_col = args[0]
     end
+
+    query = "UPDATE #{self.class.get_table_name} SET "
+    query = self.class.get_columns.inject(query) do |acc, col|
+      acc + col.name.to_s + " = ?, "
+    query = query[0..-3] # remove last =?,
+    
     query += " WHERE #{id_col.to_s} = ?"
     Database.execute(query, @column_values + [@column_values.first])
     p query
-    puts @column_values
+    end
   end
 
   def to_s
@@ -180,9 +185,14 @@ class User < Table
     BCrypt::Password.new(@password) == hashed_password
   end
 
+  def null?
+    get_id == nil
+  end
+
   def self.login(browser_username, browser_pass, session)
     user = get name: browser_username
-    if BCrypt::Password.new(user.get_password) == browser_pass
+    login_success = BCrypt::Password.new(user.get_password) == browser_pass && (!user.null?)
+    if login_success
       session[:user_id] = user.get_id
     end
   end
@@ -202,8 +212,12 @@ class User < Table
         result = Database.execute("SELECT * FROM #{get_table_name} WHERE username = ?", identifier[:name])
       end
     end
-    user = User.new(result[0])
-    user.set_stat_model (Stat.new result[0])
+    if result.empty?
+      user = null_user
+    else
+      user = User.new(result[0])
+      user.set_stat_model (Stat.new result[0])
+    end
     user
   end
 
@@ -276,6 +290,18 @@ class User < Table
   def get_db_hash
     @db_hash
   end
+
+  def add_friend(other_user)
+    relation = FriendRelation.null_friendship
+    relation.set_user1 get_id
+    relation.set_user2 other_user.get_id
+
+    # If friendship already exists, dont add it again
+    friendship = FriendRelation.select_all where: "((user1 = #{get_id}) AND (user2 = #{other_user.get_id})) OR ((user1 = #{other_user.get_id}) AND (user2 = #{get_id}))"
+    if friendship.length == 0
+      relation.save_as_new_relation
+    end
+  end
 end
 
 class Boss < Table
@@ -342,6 +368,7 @@ class Stat < Table
   column :herblore, :int
   column :thieving, :int
   column :farming, :int
+
   def initialize(db_hash)
     super()
 
@@ -358,3 +385,25 @@ class Stat < Table
     set_farming db_hash['farming']
   end
 end
+
+class FriendRelation < Table
+  table_name "friend_relations"
+  column :user1, :int, :no_null
+  column :user2, :int, :no_null
+
+  def initialize(db_hash)
+    super()
+
+    set_user1 db_hash['user1']
+    set_user2 db_hash['user2']
+  end
+
+  def self.null_friendship
+    FriendRelation.new({})
+  end
+  
+  def save_as_new_relation
+    self.class.insert [get_user1, get_user2]
+  end
+end
+

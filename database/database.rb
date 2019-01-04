@@ -46,6 +46,13 @@ class Database
          boss_id INTEGER NOT NULL,
          FOREIGN KEY(user_id) REFERENCES users(id),
          FOREIGN KEY(boss_id) REFERENCES bosses(id))')
+    elsif tables.include? 'friend_relations'
+      execute('DROP TABLE IF EXISTS friend_relations')
+      execute('CREATE TABLE friend_relations 
+        (user1 INTEGER NOT NULL,
+         user2 INTEGER NOT NULL,
+         FOREIGN KEY(user1) REFERENCES users(id),
+         FOREIGN KEY(user2) REFERENCES users(id))')
     end
   end
 
