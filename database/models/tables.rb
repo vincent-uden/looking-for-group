@@ -124,7 +124,7 @@ class Table
     if options[:where]
       query += "WHERE " + options[:where]
     end
-    Database.execute(query, options[:values])
+    Database.execute query, options[:values]
   end
 
   def save(*args)
@@ -291,14 +291,21 @@ class User < Table
     @db_hash
   end
 
+  def is_friend?(other_user)
+    puts "##################"
+    ap self
+    ap other_user
+    puts "######################"
+    friendship = FriendRelation.select_all where: "((user1 = #{get_id}) AND (user2 = #{other_user.get_id})) OR ((user1 = #{other_user.get_id}) AND (user2 = #{get_id}))"
+    return friendship.length > 0
+  end
+
   def add_friend(other_user)
     relation = FriendRelation.null_friendship
     relation.set_user1 get_id
     relation.set_user2 other_user.get_id
 
-    # If friendship already exists, dont add it again
-    friendship = FriendRelation.select_all where: "((user1 = #{get_id}) AND (user2 = #{other_user.get_id})) OR ((user1 = #{other_user.get_id}) AND (user2 = #{get_id}))"
-    if friendship.length == 0
+    if !is_friend?(other_user)
       relation.save_as_new_relation
     end
   end
