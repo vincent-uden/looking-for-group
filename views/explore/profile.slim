@@ -39,6 +39,6 @@ main.preload
     form action="/explore/profile/add_friend/#{@profile_owner.get_id}" method="post"
       - if @current_user.get_id
         - if @profile_owner.is_friend? @current_user
-          input type="Submit" value="Already friends" disabled="true"
+          input type="Submit" value="You are already friends" disabled="true"
         - else
           input type="Submit" value="Send friend request"

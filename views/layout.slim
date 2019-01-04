@@ -20,11 +20,12 @@ html
       == yield
     - else
       link rel="stylesheet" href="/css/index.css"
+      script src="/js/main.js"
       main
         .panel
           h1 Welcome to LFG
           .login
-            form action="/login" method="post"
+            form action="/login" method="post" id="loginForm"
               input.text-input type="text" name="username" placeholder="Username"
               input.text-input type="password" name="password" placeholder="Password"
               button type="submit" Log in
