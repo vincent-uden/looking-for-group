@@ -6,8 +6,7 @@ class Column
     @no_null = options[:no_null]
     @unique = options[:unique]
     @prim_key = options[:prim_key]
-    @belongs_to = options[:belongs_to]
-    @value = nil
+    @belongs_to = options[:belongs_to] @value = nil
   end
 
   def set_val(value)
@@ -292,10 +291,6 @@ class User < Table
   end
 
   def is_friend?(other_user)
-    puts "##################"
-    ap self
-    ap other_user
-    puts "######################"
     friendship = FriendRelation.select_all where: "((user1 = #{get_id}) AND (user2 = #{other_user.get_id})) OR ((user1 = #{other_user.get_id}) AND (user2 = #{get_id}))"
     return friendship.length > 0
   end
