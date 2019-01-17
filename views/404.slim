@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title 404 - Page Not Found
+    link rel="stylesheet" type="text/css" href="/css/main.css"
+    link rel="stylesheet" type="text/css" href="/css/404.css"
+    link href="https://fonts.googleapis.com/css?family=Roboto:300, 400" rel="stylesheet"
+    link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
+  body class=(@current_user.get_dark_mode == 1 ? 'dark' : 'light')
+    main
+      .panel
+        h1 404 - Page Not Found
+        p We could not find the page you were looking for. 
+        p 
+          ' If you reached this page through a link on our website
+          ' please contact us at 
+          a href="mailto:vincentuden@gmail.com" vincentuden@gmail.com
+            
+        a href="/"
+          p Click here to go back home
+        img src="/img/404.gif"

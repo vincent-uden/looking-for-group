@@ -6,13 +6,13 @@ class Column
     @no_null = options[:no_null]
     @unique = options[:unique]
     @prim_key = options[:prim_key]
-    @belongs_to = options[:belongs_to] @value = nil
+    @belongs_to = options[:belongs_to] 
+    @value = nil
   end
 
   def set_val(value)
     @value = value
-  end
-
+  end 
   def get_val
     @value
   end
@@ -123,6 +123,9 @@ class Table
     if options[:where]
       query += "WHERE " + options[:where]
     end
+    if options[:debug]
+      p query
+    end
     Database.execute query, options[:values]
   end
 
@@ -155,6 +158,28 @@ class Table
     return output
   end
 
+end
+
+class NullUser
+  def initialize()
+  end
+
+  def get_username
+    ""
+  end
+
+  def null?
+    true
+  end
+
+  def method_missing(method_name, *args, &blk)
+    if User.method_defined? method_name
+      return
+    elsif method_name.to_s[0..3] == "get_"
+      return
+    end
+    super(method_name, *args, &blk)
+  end
 end
 
 class User < Table
@@ -221,14 +246,7 @@ class User < Table
   end
 
   def self.null_user()
-    User.new({'id'          => nil,
-              'username'    => '',
-              'password'    => nil,
-              'email'       => nil,
-              'rsn'         => nil,
-              'stats_id'    => nil,
-              'dark_mode'   => 0
-              })
+    NullUser.new
   end
 
   def get_interests
@@ -291,7 +309,7 @@ class User < Table
   end
 
   def is_friend?(other_user)
-    friendship = FriendRelation.select_all where: "((user1 = #{get_id}) AND (user2 = #{other_user.get_id})) OR ((user1 = #{other_user.get_id}) AND (user2 = #{get_id}))"
+    friendship = FriendRelation.select_all where: "((user1 = #{get_id}) AND (user2 = #{other_user.get_id}))"
     return friendship.length > 0
   end
 
@@ -302,7 +320,16 @@ class User < Table
 
     if !is_friend?(other_user)
       relation.save_as_new_relation
+      relation.flip.save_as_new_relation
     end
+  end
+
+  def get_friends()
+    friends = FriendRelation.select_all where: "user1 = #{get_id}", debug: true
+    friends.map! do |hash|
+      User.get id: hash['user2']
+    end
+    ap friends
   end
 end
 
@@ -406,6 +433,19 @@ class FriendRelation < Table
   
   def save_as_new_relation
     self.class.insert [get_user1, get_user2]
+  end
+  
+  def flip
+    tmp = FriendRelation {}
+    tmp.set_user1 get_user2
+    tmp.set_user2 get_user1
+    return tmp
+  end
+
+  def flip!
+    tmp = get_user1
+    set_user1 get_user2
+    set_user2 tmp
   end
 end
 

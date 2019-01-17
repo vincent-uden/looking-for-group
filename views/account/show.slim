@@ -1,0 +1,18 @@
+link rel="stylesheet" type="text/css" href="/css/account/show.css"
+main.preload
+  .panel
+    h1 =@current_user.get_username
+    .friends
+      h2 Friends
+    .panel
+      .list_header
+        label Name
+      .people_list
+        ul
+        - if !@friends.nil?
+          - odd = false
+          - for friend in @friends
+            - odd = !odd
+            a href="/explore/profile/#{friend.get_db_hash[0]}"
+              li class=(odd ? "light" : "dark")
+                label =friend.get_username
