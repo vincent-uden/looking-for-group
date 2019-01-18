@@ -123,6 +123,11 @@ body {
         font-size: 20px;
         color: $light_font_color;
     }
+
+    i.material-icons {
+        font-size: 40px;
+        color: $light_font_color;
+    }
 } 
 
 body.dark {
@@ -197,6 +202,10 @@ body.dark {
     }
     
     li {
+        color: $dark_font_color;
+    }
+
+    i.material-icons {
         color: $dark_font_color;
     }
 }
