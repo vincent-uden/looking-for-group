@@ -140,14 +140,16 @@ class Table
     end
 
     query = "UPDATE #{self.class.get_table_name} SET "
+    p query
     query = self.class.get_columns.inject(query) do |acc, col|
       acc + col.name.to_s + " = ?, "
+    end
     query = query[0..-3] # remove last =?,
     
     query += " WHERE #{id_col.to_s} = ?"
+    p query
     Database.execute(query, @column_values + [@column_values.first])
     p query
-    end
   end
 
   def to_s

@@ -37,6 +37,5 @@ main.preload
       p On
     form.hidden action="/account/dark_mode" method="post" id="darkModeForm"
       input type="checkbox" id="darkModeCheckBox" name="darkModeCheckBox" checked=(@current_user.get_dark_mode == 1 ? true : false)
-      - p (@current_user.get_dark_mode == 1 ? true : false)
 script src="/js/account/manage.js"
 <script> </script>
