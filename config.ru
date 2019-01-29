@@ -1,5 +1,4 @@
 # rackup
-
 require 'bundler'
 Bundler.require
 
