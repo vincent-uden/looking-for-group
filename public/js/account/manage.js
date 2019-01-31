@@ -22,7 +22,19 @@ function submitDarkMode() {
     //form.submit();
     
     var request = new XMLHttpRequest();
-    var url = "/account/manage/darkMode/";
-    url += checkbox.checked; //TODO: Finish
+    var url = "/account/manage/dark_mode/";
+    url += checkbox.checked;
+
+    request.onreadystatechange = function () {
+        console.log(request.status);
+        if (request.readyState === 4 && request.status === 200) {
+            let body = document.getElementsByTagName("body")[0];
+            body.classList.toggle("light");
+            body.classList.toggle("dark");
+        }
+    }
+
     console.log(url);
+    request.open("POST", url);
+    request.send();
 }

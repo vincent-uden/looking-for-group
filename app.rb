@@ -81,8 +81,12 @@ class App < Sinatra::Base
   end
   
   # Updating Dark Mode
-  post '/account/dark_mode' do
-    @current_user.set_dark_mode (@current_user.get_dark_mode == 1 ? 0 : 1)
+  post '/account/manage/dark_mode/:enabled' do
+    if params['enabled'] == 'true'
+      @current_user.set_dark_mode 1
+    elsif params['enabled'] == 'false'
+      @current_user.set_dark_mode 0
+    end
     @current_user.save
     redirect back
   end

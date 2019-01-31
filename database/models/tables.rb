@@ -169,12 +169,18 @@ class NullUser
   def get_username
     ""
   end
+  
+  def get_interests
+    []
+  end
 
   def null?
     true
   end
 
   def method_missing(method_name, *args, &blk)
+    p method_name
+    p method_name.to_s[0..3]
     if User.method_defined? method_name
       return
     elsif method_name.to_s[0..3] == "get_"

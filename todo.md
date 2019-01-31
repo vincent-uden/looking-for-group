@@ -16,4 +16,3 @@
 
 ### Bugs
 - Adding user test2 causes crash
-- Switch for dark/light mode does nothing
