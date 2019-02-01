@@ -13,6 +13,7 @@
     - Make sure that every request is coming with the right permissions
 - Switch to sassc instead of ruby-sass
 - Create sql generation methods
+- Add unique constraint to email adress and username
 
 ### Bugs
 - Adding user test2 causes crash

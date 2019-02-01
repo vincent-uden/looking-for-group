@@ -44,8 +44,8 @@ class Table
     if @columns == nil
       @columns = []
     end
-    if args[1] == :prim_key # Autoincrementing primary key
-      @columns << (Column.new args[0], prim_key: true)
+    if args.include? :prim_key # Autoincrementing primary key
+      @columns << (Column.new args[0], :int, prim_key: true)
     else # Arg[1] will be datatype
       options = {}
       options[:no_null] = args.include? :no_null
@@ -100,12 +100,16 @@ class Table
   def self.insert(values)
     query = "INSERT INTO #{get_table_name} ("
     get_columns.each do |col|
-      query += col.name.to_s + ", "
+      if !col.prim_key
+        query += col.name.to_s + ", "
+      end
     end
     query = query[0..-3]
     query += ") VALUES ("
     get_columns.each do |col|
-      query += "?, "
+      if !col.prim_key
+        query += "?, "
+      end
     end
     query = query[0..-3]
     query += ")"
@@ -140,16 +144,13 @@ class Table
     end
 
     query = "UPDATE #{self.class.get_table_name} SET "
-    p query
     query = self.class.get_columns.inject(query) do |acc, col|
       acc + col.name.to_s + " = ?, "
     end
     query = query[0..-3] # remove last =?,
     
     query += " WHERE #{id_col.to_s} = ?"
-    p query
     Database.execute(query, @column_values + [@column_values.first])
-    p query
   end
 
   def to_s
@@ -179,8 +180,6 @@ class NullUser
   end
 
   def method_missing(method_name, *args, &blk)
-    p method_name
-    p method_name.to_s[0..3]
     if User.method_defined? method_name
       return
     elsif method_name.to_s[0..3] == "get_"
@@ -192,7 +191,7 @@ end
 
 class User < Table
   table_name 'users'
-  column :id, :prim_key
+  column :id, :int, :prim_key
   column :username, :string40, :no_null, :unique
   column :password, :string40, :no_null
   column :email, :string100, :no_null
@@ -257,6 +256,11 @@ class User < Table
     NullUser.new
   end
 
+  def self.create_user(columns)
+    stat_id = Stat.create_stat columns[:rsn]
+    insert(columns.values)
+  end
+
   def get_interests
     UserBossInterest.get_users_interests get_id
   end
@@ -281,11 +285,6 @@ class User < Table
       end
     end
     return image_name
-  end
-
-  def get_stats
-    result = Stats.select_all where: "id = ?", values: [get_stat_id]
-    Stats.new result[0]
   end
 
   def set_stat_model(stats)
@@ -339,11 +338,12 @@ class User < Table
     end
     ap friends
   end
+
 end
 
 class Boss < Table
   table_name 'bosses'
-  column :id, :prim_key
+  column :id, :int, :prim_key
   column :name, :string60, :no_null
   column :boss_img, :string40
   column :wiki_link, :string255
@@ -393,7 +393,7 @@ end
 
 class Stat < Table
   table_name "stats"
-  column :id, :prim_key
+  column :id, :int, :prim_key
   column :attack, :int
   column :defence, :int
   column :strength, :int
@@ -409,17 +409,33 @@ class Stat < Table
   def initialize(db_hash)
     super()
 
-    set_attack db_hash['attack']
-    set_defence db_hash['defence']
-    set_strength db_hash['strength']
+    set_id        db_hash['id']
+    set_attack    db_hash['attack']
+    set_defence   db_hash['defence']
+    set_strength  db_hash['strength']
     set_hitpoints db_hash['hitpoints']
-    set_ranged db_hash['ranged']
-    set_prayer db_hash['prayer']
-    set_magic db_hash['magic']
-    set_mining db_hash['mining']
-    set_herblore db_hash['herblore']
-    set_thieving db_hash['thieving']
-    set_farming db_hash['farming']
+    set_ranged    db_hash['ranged']
+    set_prayer    db_hash['prayer']
+    set_magic     db_hash['magic']
+    set_mining    db_hash['mining']
+    set_herblore  db_hash['herblore']
+    set_thieving  db_hash['thieving']
+    set_farming   db_hash['farming']
+  end
+
+  def self.create_stat(rsn)
+    begin
+      converted_name = RuneScapeApi::convert_username(rsn)
+    rescue ArgumentError
+      converted_name = ""
+    end
+    stats = RuneScapeApi::get_stats(converted_name)
+    ap stats.values
+    insert(stats.values)
+    #Database.execute('INSERT INTO stats 
+    #                (attack, defence, strength, hitpoints, ranged, prayer, magic, mining, herblore, thieving, farming) 
+    #                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', stats.values)
+    Stat.new(Database.execute('SELECT * FROM stats ORDER BY id DESC LIMIT 1')[0])
   end
 end
 
@@ -444,7 +460,7 @@ class FriendRelation < Table
   end
   
   def flip
-    tmp = FriendRelation {}
+    tmp = self.class.null_friendship
     tmp.set_user1 get_user2
     tmp.set_user2 get_user1
     return tmp
