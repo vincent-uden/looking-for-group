@@ -198,6 +198,7 @@ class User < Table
   column :rsn, :string40
   belongs_to :stats, 'stat' #has_many :users 
   column :dark_mode, :int
+
   def initialize(db_hash)
     super()
     
@@ -257,8 +258,8 @@ class User < Table
   end
 
   def self.create_user(columns)
-    stat_id = Stat.create_stat columns[:rsn]
-    insert(columns.values)
+    stats = Stat.create_stat columns[:rsn]
+    insert(columns.values + [stats.get_id, 0])
   end
 
   def get_interests
@@ -297,14 +298,16 @@ class User < Table
 
   def get_other_user_stat_pairs
     if get_id
-      result = User.select_all join: 'stats', on: 'users.id = stats.id', 
+      result = User.select_all join: 'stats', on: 'users.stat_id = stats.id', 
                                where: "users.id != #{get_id}"
+      ap result
       models = result.map do |row|
         User.new row
       end
       stats = result.map do |row|
         Stat.new row
       end
+      ap models
       models.zip stats
     else
       return []
@@ -336,7 +339,6 @@ class User < Table
     friends.map! do |hash|
       User.get id: hash['user2']
     end
-    ap friends
   end
 
 end
@@ -430,7 +432,6 @@ class Stat < Table
       converted_name = ""
     end
     stats = RuneScapeApi::get_stats(converted_name)
-    ap stats.values
     insert(stats.values)
     #Database.execute('INSERT INTO stats 
     #                (attack, defence, strength, hitpoints, ranged, prayer, magic, mining, herblore, thieving, farming) 

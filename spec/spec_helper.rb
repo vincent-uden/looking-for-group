@@ -1,17 +1,21 @@
-require 'capybara'
-require 'capybara/dsl'
-require 'sinatra'
+# Configuration for acceptance tests
+
+# Set the environment to 'test' to use correct settings in config/environment
+ENV['RACK_ENV'] = 'test'
+
+# Use bundler to load gems
 require 'bundler'
 
+# Load gems from Gemfile
 Bundler.require
 
-#require_relative '../app'
+# Load the environment
+require_relative '../config/environment'
+require_relative '../app'
+require 'capybara/rspec'
 
-Capybara.app = Sinatra::Application
-Capybara.app_host = "http://localhost:9292"
-Capybara.server_host = "localhost"
-Capybara.server_port = "92929"
+Capybara.app = App
+Capybara.server = :webrick
+#Capybara.app_host = 'http://localhost:'
 
-RSpec.configure do |config|
-  config.include Capybara::DSL
-end
+Capybara.default_driver = :selenium_chrome #:selenium_chrome_headless are also registered

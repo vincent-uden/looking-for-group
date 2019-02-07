@@ -2,8 +2,17 @@ require_relative '../database/database'
 require_relative '../database/models/tables'
 require_relative '../highscore_api'
 
-p "------------------"
-p "-   Restarting   -"
-p "------------------"
+puts "--------------------"
+puts "-    Restarting    -"
+puts "--------------------"
 
-u = User.get id: 2
+if ENV['RACK_ENV'] == 'test'
+  puts "- Test environment -"
+  puts "--------------------"
+  Database.db = SQLite3::Database.new ':memory:'
+  Database.clear 'users'
+  Database.clear 'bosses'
+  Database.clear 'friend_relations'
+  Database.clear 'stats'
+  Database.clear 'user_boss_interests'
+end

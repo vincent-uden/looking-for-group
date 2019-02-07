@@ -6,6 +6,10 @@ class Database
     @@db.execute(*args)
   end
 
+  def self.db=(database)
+    @@db = database
+  end
+
   def self.clear(tables)
     if tables.include? 'users'
       execute('DROP TABLE IF EXISTS users')
