@@ -433,10 +433,9 @@ class Stat < Table
     end
     stats = RuneScapeApi::get_stats(converted_name)
     insert(stats.values)
-    #Database.execute('INSERT INTO stats 
-    #                (attack, defence, strength, hitpoints, ranged, prayer, magic, mining, herblore, thieving, farming) 
-    #                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', stats.values)
-    Stat.new(Database.execute('SELECT * FROM stats ORDER BY id DESC LIMIT 1')[0])
+    result = Database.execute('SELECT * FROM stats ORDER BY id DESC LIMIT 1')[0]
+    p result
+    Stat.new(result)
   end
 end
 

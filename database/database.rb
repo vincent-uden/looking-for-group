@@ -8,6 +8,7 @@ class Database
 
   def self.db=(database)
     @@db = database
+    @@db.results_as_hash = true
   end
 
   def self.clear(tables)
@@ -20,6 +21,7 @@ class Database
          profile_img VARCHAR(40),
          rsn VARCHAR(40),
          stat_id INTEGER,
+         dark_mode INTEGER,
          FOREIGN KEY(stat_id) REFERENCES stats(id))')
     elsif tables.include? 'stats'
       execute('DROP TABLE IF EXISTS stats')
