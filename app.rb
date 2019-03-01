@@ -3,6 +3,12 @@ require_relative './config/environment'
 class App < Sinatra::Base
   @@boss_image_path = '/img/boss/'
 
+  def self.get(*args, &blk)
+    p args[0]
+    p args[1]
+    super(args[0])
+  end
+
 # -------------------------------- Login --------------------------------- #
 
   enable :sessions
@@ -74,7 +80,7 @@ class App < Sinatra::Base
   end
 
   # Show own profile
-  get '/account/show' do
+  get '/account/show', :login_required do
     @friends = @current_user.get_friends
     slim :'account/show'
   end

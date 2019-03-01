@@ -119,14 +119,21 @@ class Table
   def self.select_all(options)
     query = "SELECT * FROM #{get_table_name} "
     if options[:join]
-      query += "JOIN " + options[:join] + " "
+      query += "JOIN #{options[:join]} "
       if options[:on]
-        query += "ON " + options[:on] + " "
+        query += "ON #{options[:on]} "
       end
     end
     if options[:where]
-      query += "WHERE " + options[:where]
+      query += "WHERE #{options[:where]} "
     end
+    if options[:order_by]
+      query += "ORDER BY #{options[:order_by]} "
+    end
+    if options[:limit]
+      query += "LIMIT #{options[:limit]} "
+    end
+    query += ";"
     if options[:debug]
       p query
     end
@@ -259,6 +266,11 @@ class User < Table
 
   def self.create_user(columns)
     stats = Stat.create_stat columns[:rsn]
+    insert(columns.values + [stats.get_id, 0])
+  end
+
+  def self.create_test_user(columns)
+    stats = Stat.create_test_stat
     insert(columns.values + [stats.get_id, 0])
   end
 
@@ -433,11 +445,25 @@ class Stat < Table
     end
     stats = RuneScapeApi::get_stats(converted_name)
     insert(stats.values)
-    result = Database.execute('SELECT * FROM stats ORDER BY id DESC LIMIT 1')[0]
-    p result
-    Stat.new(result)
+    result = Database.execute('SELECT * FROM stats ORDER BY id DESC LIMIT 1')[0] # TODO: Refactor this to use select_all
+    p "Created user"
+    Stat.new result
+  end
+
+  def self.create_test_stat()
+    stats = Stat.select_all order_by: 'id DESC', limit: 1
+    p stats
+    no_id = stats[0].values
+    no_id = no_id[1..no_id.length / 2 - 1]
+    p no_id
+    insert no_id
+    result = Stat.select_all order_by: 'id DESC', limit: 1
+    result = result[0]
+    p "Created test user"
+    Stat.new result
   end
 end
+
 
 class FriendRelation < Table
   table_name "friend_relations"
