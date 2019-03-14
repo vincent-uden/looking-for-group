@@ -312,14 +312,12 @@ class User < Table
     if get_id
       result = User.select_all join: 'stats', on: 'users.stat_id = stats.id', 
                                where: "users.id != #{get_id}"
-      ap result
       models = result.map do |row|
         User.new row
       end
       stats = result.map do |row|
         Stat.new row
       end
-      ap models
       models.zip stats
     else
       return []
@@ -347,7 +345,7 @@ class User < Table
   end
 
   def get_friends()
-    friends = FriendRelation.select_all where: "user1 = #{get_id}", debug: true
+    friends = FriendRelation.select_all where: "user1 = #{get_id}"
     friends.map! do |hash|
       User.get id: hash['user2']
     end
@@ -446,20 +444,16 @@ class Stat < Table
     stats = RuneScapeApi::get_stats(converted_name)
     insert(stats.values)
     result = Database.execute('SELECT * FROM stats ORDER BY id DESC LIMIT 1')[0] # TODO: Refactor this to use select_all
-    p "Created user"
     Stat.new result
   end
 
   def self.create_test_stat()
     stats = Stat.select_all order_by: 'id DESC', limit: 1
-    p stats
     no_id = stats[0].values
     no_id = no_id[1..no_id.length / 2 - 1]
-    p no_id
     insert no_id
     result = Stat.select_all order_by: 'id DESC', limit: 1
     result = result[0]
-    p "Created test user"
     Stat.new result
   end
 end

@@ -55,13 +55,6 @@ class App < Sinatra::Base
 
   # Create account confirmation
   post '/account/new' do
-    #username = params['username']
-    # Encrypt
-    #password = params['password']
-    #email = params['email']
-    #profile_img = nil
-    #rsn = params['rsn']
-    #Database.insert_user(username, BCrypt::Password.create(password), email, profile_img, rsn)
     User.create_user({
       username: params['username'], 
       password: BCrypt::Password.create(params['password']), 

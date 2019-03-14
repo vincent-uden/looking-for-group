@@ -14,4 +14,13 @@ feature 'Account' do
     visit '/account/show'
     expect(page).to have_content 'Friends'
   end
+
+  scenario 'adding a friend' do
+    visit '/explore/find_teammates'
+    expect(page).to have_content 'Find new bossing partners'
+    click_link 'User8'
+    within '#addFriendForm' do
+      find('input[type=submit]').click
+    end
+  end
 end

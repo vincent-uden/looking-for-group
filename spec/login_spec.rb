@@ -23,7 +23,7 @@ feature 'Entering the web page' do
       fill_in 'password', with: Helper.TEST_PASSWORD
     end
     click_button 'Log in'
-    expect(page).to have_content "Welcome #{Helper.TEST_USERNAME}"
+    expect(page).to have_content "Welcome #{Helper.other_user_data[0][0]}"
     within 'nav' do
       click_button 'Log out'
     end

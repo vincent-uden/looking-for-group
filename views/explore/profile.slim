@@ -35,8 +35,8 @@ main.preload
     ul
       - for boss in @bosses
         li =boss.get_name
+    form action="/explore/profile/add_friend/#{@profile_owner.get_id}" method="post" id="addFriendForm"
 
-    form action="/explore/profile/add_friend/#{@profile_owner.get_id}" method="post"
       - if @current_user.get_id
         - if @profile_owner.is_friend? @current_user
           input type="Submit" value="You are already friends" disabled="true"

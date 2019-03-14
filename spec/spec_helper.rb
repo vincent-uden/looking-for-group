@@ -19,7 +19,10 @@ Capybara.app = App
 Capybara.server = :webrick
 #Capybara.app_host = 'http://localhost:'
 
-Capybara.default_driver = :selenium_chrome #:selenium_chrome_headless are also registered
+Capybara.default_driver = :selenium_chrome
+if ENV['headless'] == 'true'
+  Capybara.default_driver = :selenium_chrome_headless
+end
 
 Helper.populate_user_table
 # TODO: Create testing for manage account
