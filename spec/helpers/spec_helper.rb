@@ -10,8 +10,8 @@ require 'bundler'
 Bundler.require
 
 # Load the environment
-require_relative '../config/environment'
-require_relative '../app'
+require_relative '../../config/environment'
+require_relative '../../app'
 require_relative './helper_class.rb'
 require 'capybara/rspec'
 
@@ -25,4 +25,3 @@ if ENV['headless'] == 'true'
 end
 
 Helper.populate_user_table
-# TODO: Create testing for manage account

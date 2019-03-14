@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require_relative 'helpers/spec_helper'
 
 feature 'Account' do
   before :each do
@@ -10,12 +10,13 @@ feature 'Account' do
     click_button 'Log in'
   end
 
-  scenario 'looking at your friends' do
+  scenario 'Looking at your friends' do
     visit '/account/show'
     expect(page).to have_content 'Friends'
+    expect(page).to have_content 'User2'
   end
 
-  scenario 'adding a friend' do
+  scenario 'Adding a friend' do
     visit '/explore/find_teammates'
     expect(page).to have_content 'Find new bossing partners'
     click_link 'User8'

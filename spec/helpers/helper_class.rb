@@ -53,5 +53,9 @@ class Helper
         rsn:      row[3]
       })
     end
+
+    test_user = User.get name: 'User1'
+    other_user = User.get name: 'User2'
+    test_user.add_friend other_user
   end
 end

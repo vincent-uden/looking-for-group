@@ -4,8 +4,6 @@ class App < Sinatra::Base
   @@boss_image_path = '/img/boss/'
 
   def self.get(*args, &blk)
-    p args[0]
-    p args[1]
     super(args[0])
   end
 

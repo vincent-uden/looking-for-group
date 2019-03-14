@@ -1,7 +1,7 @@
-require_relative 'spec_helper'
+require_relative 'helpers/spec_helper'
 
 feature 'Entering the web page' do
-  scenario 'succesfully creates a new user' do
+  scenario 'Creating a new user' do
     visit '/'
     click_button 'Register Account'
     expect(page).to have_content 'Register Account'
@@ -23,7 +23,7 @@ feature 'Entering the web page' do
       fill_in 'password', with: Helper.TEST_PASSWORD
     end
     click_button 'Log in'
-    expect(page).to have_content "Welcome #{Helper.other_user_data[0][0]}"
+    expect(page).to have_content "Welcome #{Helper.TEST_USERNAME}"
     within 'nav' do
       click_button 'Log out'
     end
