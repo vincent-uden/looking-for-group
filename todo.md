@@ -9,9 +9,9 @@
 ## Back end
 - Migrate to MySQL/Postgress
 - Increase security
-    - Increase robustness of user registration
     - Make sure that every request is coming with the right permissions
 - Switch to sassc instead of ruby-sass
 - Add unique constraint to email adress and username
 
-### Bugs
+## Current Goal
+- Increase robustness of user registration

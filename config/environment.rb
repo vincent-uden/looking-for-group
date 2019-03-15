@@ -16,3 +16,9 @@ if ENV['RACK_ENV'] == 'test'
   Database.clear 'stats'
   Database.clear 'user_boss_interests'
 end
+
+if ENV['offline'] == 'true'
+  puts "- Using Offline Api-"
+  puts "--------------------"
+  RuneScapeApi.set_offline true
+end

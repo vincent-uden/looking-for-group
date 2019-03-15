@@ -1,0 +1,10 @@
+{:attack=>89, :defence=>88, :strength=>94, :hitpoints=>96, :ranged=>95, :prayer=>70, :magic=>87, :mining=>67, :herblore=>58, :thieving=>55, :farming=>51}
+{:attack=>98, :defence=>97, :strength=>99, :hitpoints=>99, :ranged=>99, :prayer=>77, :magic=>96, :mining=>77, :herblore=>84, :thieving=>99, :farming=>96}
+{:attack=>99, :defence=>99, :strength=>99, :hitpoints=>99, :ranged=>99, :prayer=>99, :magic=>99, :mining=>99, :herblore=>99, :thieving=>99, :farming=>99}
+{:attack=>44, :defence=>9, :strength=>30, :hitpoints=>43, :ranged=>1, :prayer=>43, :magic=>57, :mining=>46, :herblore=>20, :thieving=>27, :farming=>2}
+{:attack=>99, :defence=>99, :strength=>99, :hitpoints=>99, :ranged=>99, :prayer=>90, :magic=>99, :mining=>96, :herblore=>99, :thieving=>99, :farming=>99}
+{:attack=>69, :defence=>48, :strength=>74, :hitpoints=>26, :ranged=>93, :prayer=>40, :magic=>56, :mining=>34, :herblore=>72, :thieving=>55, :farming=>71}
+{:attack=>60, :defence=>45, :strength=>99, :hitpoints=>99, :ranged=>99, :prayer=>87, :magic=>94, :mining=>97, :herblore=>84, :thieving=>99, :farming=>96}
+{:attack=>99, :defence=>99, :strength=>99, :hitpoints=>99, :ranged=>99, :prayer=>99, :magic=>99, :mining=>99, :herblore=>99, :thieving=>99, :farming=>59}
+{:attack=>44, :defence=>89, :strength=>30, :hitpoints=>43, :ranged=>88, :prayer=>43, :magic=>79, :mining=>46, :herblore=>20, :thieving=>27, :farming=>2}
+{:attack=>99, :defence=>99, :strength=>99, :hitpoints=>99, :ranged=>99, :prayer=>90, :magic=>99, :mining=>96, :herblore=>99, :thieving=>99, :farming=>99}

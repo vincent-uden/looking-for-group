@@ -3,9 +3,29 @@ require 'awesome_print'
 
 
 class RuneScapeApi
-  @@BASE_URL   = 'https://secure.runescape.com'
-  @@BASE_QUERY = '/m=hiscore_oldschool/index_lite.ws?player='
+  @@BASE_URL     = 'https://secure.runescape.com'
+  @@BASE_QUERY   = '/m=hiscore_oldschool/index_lite.ws?player='
+  @@OFFLINE_MODE = false
+  @@OFFLINE_STATS = []
+  
+  def self.set_offline(is_offline)
+    @@OFFLINE_MODE = is_offline
+    stats = File.readlines "stats.txt"
+    @@OFFLINE_STATS = stats.map { |stat| eval(stat) }
+  end
+
+  def self.get_offline_stat(rsn)
+    sum = 0
+    rsn.each_byte do |b|
+      sum += b
+    end
+    @@OFFLINE_STATS[sum % @@OFFLINE_STATS.length]
+  end
+
   def self.get_stats(rsn)
+    if @@OFFLINE_STATS
+      return get_offline_stat rsn
+    end
     uri = URI(@@BASE_URL + @@BASE_QUERY + rsn.to_s)
     response = Net::HTTP.get_response(uri)
     if response.code == "200"

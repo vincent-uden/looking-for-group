@@ -119,7 +119,7 @@ class Table
   def self.select_all(options)
     query = "SELECT * FROM #{get_table_name} "
     if options[:join]
-      query += "JOIN #{options[:join]} "
+      query += "JOIN #{options[:join].get_table_name} "
       if options[:on]
         query += "ON #{options[:on]} "
       end
@@ -239,10 +239,10 @@ class User < Table
   def self.get(identifier)
     options = identifier
     if options[:include_stats]
-      if identifier[:id]
-        result = select_all join: 'stats', on: 'users.id = stats.id', where: "users.id = #{identifier[:id]}"
-      elsif identifier[:name]
-        result = select_all join: 'stats', on: 'users.id = stats.id', where: "username = #{identifier[:name]}"
+      if options[:id]
+        result = select_all join: Stat, on: 'users.stat_id = stats.id', where: "users.id = #{identifier[:id]}"
+      elsif options[:name]
+        result = select_all join: Stat, on: 'users.stat_id = stats.id', where: "username = #{identifier[:name]}"
       end
     else
       if identifier[:id]
@@ -264,7 +264,16 @@ class User < Table
     NullUser.new
   end
 
+  def self.validate_new_username(username)
+    is_ok = true
+    is_ok = is_ok && username.length > 3
+    is_ok = is_ok && username == username[/[a-zA-Z0-9\-\_\.]+/]
+  end
+
   def self.create_user(columns)
+    # Requirements for username:
+    #   At least 4 characters long
+    #   Alphanumeric (0-9, A-z, _-.)
     stats = Stat.create_stat columns[:rsn]
     insert(columns.values + [stats.get_id, 0])
   end
@@ -310,7 +319,7 @@ class User < Table
 
   def get_other_user_stat_pairs
     if get_id
-      result = User.select_all join: 'stats', on: 'users.stat_id = stats.id', 
+      result = User.select_all join: Stat, on: 'users.stat_id = stats.id', 
                                where: "users.id != #{get_id}"
       models = result.map do |row|
         User.new row
@@ -391,7 +400,8 @@ class UserBossInterest < Table
   end
 
   def self.get_bosses(user_id)
-    result = select_all join: 'bosses', on: 'boss_id = bosses.id', 
+    # TODO: User id for user 15 is nil
+    result = select_all join: Boss, on: 'boss_id = bosses.id', 
                         where: "user_id = #{user_id}"
     bosses = result.map do |row|
       Boss.new row
