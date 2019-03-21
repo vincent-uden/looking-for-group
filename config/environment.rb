@@ -1,5 +1,8 @@
 require_relative '../database/database'
 require_relative '../database/models/tables'
+require_relative '../database/models/users'
+require_relative '../database/models/stats'
+require_relative '../database/models/bosses'
 require_relative '../highscore_api'
 
 puts "--------------------"
