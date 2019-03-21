@@ -400,7 +400,6 @@ class UserBossInterest < Table
   end
 
   def self.get_bosses(user_id)
-    # TODO: User id for user 15 is nil
     result = select_all join: Boss, on: 'boss_id = bosses.id', 
                         where: "user_id = #{user_id}"
     bosses = result.map do |row|

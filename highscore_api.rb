@@ -23,7 +23,7 @@ class RuneScapeApi
   end
 
   def self.get_stats(rsn)
-    if @@OFFLINE_STATS
+    if @@OFFLINE_STATS == true
       return get_offline_stat rsn
     end
     uri = URI(@@BASE_URL + @@BASE_QUERY + rsn.to_s)

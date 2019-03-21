@@ -22,3 +22,11 @@ if ENV['offline'] == 'true'
   puts "--------------------"
   RuneScapeApi.set_offline true
 end
+
+def dp(str)
+  call = caller_locations(1, 1)[0]
+  path = call.path().split "looking-for-group"
+  path = path[1]
+  print "#{path}:#{call.lineno()} "
+  p str
+end

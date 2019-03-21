@@ -115,7 +115,6 @@ class App < Sinatra::Base
   # Showing user profile
   get '/explore/profile/:user_id' do
     @profile_owner = User.get(id: params['user_id'].to_i, include_stats: true)
-    p @profile_owner
     @bosses = UserBossInterest.get_bosses @profile_owner.get_id
     slim :'explore/profile'
   end
