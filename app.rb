@@ -7,10 +7,10 @@ class App < Sinatra::Base
     super(args[0])
   end
 
+  register Sinatra::Flash
 # -------------------------------- Login --------------------------------- #
 
   enable :sessions
-  register Sinatra::Flash
 
   post '/login' do # sinatra - flash
     User.login params['username'], params['password'], session

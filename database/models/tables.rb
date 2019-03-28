@@ -140,6 +140,51 @@ class Table
     Database.execute query, options[:values]
   end
 
+  def self.select(*args)
+    if args.length > 1 && args[-1].class == Hash
+      options = args[-1]
+      columns = args[0..-2]
+    else
+      options = Hash.new
+      columns = args
+    end
+    dp args
+    dp options
+    dp columns
+    if columns[0] == :*
+      query = "SELECT * "
+    else
+      query = "SELECT ("
+      columns.each do |col|
+        query += col.to_s
+        query += ", "
+      end
+      query = query[0..-3]
+      query += ") "
+    end
+    query += "FROM #{get_table_name} "
+    if options[:join]
+      query += "JOIN #{options[:join].get_table_name} "
+      if options[:on]
+        query += "ON #{options[:on]} "
+      end
+    end
+    if options[:where]
+      query += "WHERE #{options[:where]} "
+    end
+    if options[:order_by]
+      query += "ORDER BY #{options[:order_by]} "
+    end
+    if options[:limit]
+      query += "LIMIT #{options[:limit]} "
+    end
+    query += ";"
+    if options[:debug]
+      p query
+    end
+    Database.execute query, options[:values]
+  end
+
   def save(*args)
     if args.length == 0
       id_col = self.class.get_columns.select do |col|
